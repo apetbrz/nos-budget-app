@@ -13,7 +13,7 @@ export default createStore({
     getUsername(state) {
       let token = localStorage.getItem('auth-token');
 
-      return token === null ? ERRNULLUSER : token;
+      return token === null ? 'ERRNULLUSER' : token;
     }
   },
   mutations: {
@@ -22,6 +22,12 @@ export default createStore({
     registerUser(context, data) {
       return postJson({
         url: '/register',
+        data
+      });
+    },
+    loginUser(context, data) {
+      return postJson({
+        url: '/login',
         data
       });
     }

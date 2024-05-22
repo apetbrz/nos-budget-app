@@ -34,6 +34,8 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --corner-radius: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,14 +62,22 @@
 
 header {
   background-color: var(--color-background-mute);
+  border-radius: var(--corner-radius);
 }
 
 main {
   background-color: var(--color-background-mute);
+  border-radius: var(--corner-radius);
 }
 
 menu {
   background-color: var(--color-background-mute);
+  border-radius: var(--corner-radius);
+}
+
+footer {
+  background-color: var(--color-background-mute);
+  border-radius: var(--corner-radius);
 }
 
 body {

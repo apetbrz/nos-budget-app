@@ -12,7 +12,7 @@
       <input type="password" class="form-control" id="password" v-model="password" required/>
     </div>
     <div class="form-element form-button">
-      <button class="btn" @click.prevent  ="onSubmit">Register</button>
+      <button class="btn" @click.prevent="onSubmit">Register</button>
     </div>
     <div class="form-element">
       <router-link to="/login">Already have an account?</router-link>
@@ -45,7 +45,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>

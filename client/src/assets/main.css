@@ -26,14 +26,20 @@ a,
     display: block;
     place-items: center;
   }
+  
+  html {
+    overflow-y: scroll;
+  }
 
   #app {
     display: grid;
     grid-template-areas: 
-      'header header header header'
-      'menu main main main'
-      'menu main main main'
-      'footer footer footer footer';
+      'header header'
+      'menu main'
+      'menu main'
+      'footer footer';
+    grid-template-columns: 25% 75%;
+    justify-items: stretch;
     gap: 1rem;
     padding: 2rem 2rem 1rem 2rem;
   }
@@ -50,6 +56,11 @@ a,
 
   menu {
     grid-area: menu;
+    padding: 2rem 2rem;
+  }
+
+  footer {
+    grid-area: footer;
     padding: 2rem 2rem;
   }
 }

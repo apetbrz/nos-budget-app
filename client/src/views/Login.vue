@@ -5,11 +5,11 @@
     </div>
     <div class="form-element">
       <label for="email" class="form-label">Email Address</label>
-      <input type="email" class="form-control" id="email" placeholder="name@example.com"/>
+      <input type="email" class="form-control" id="email" v-model="email" placeholder="name@example.com"/>
     </div>
     <div class="form-element">
       <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" v-model="password" placeholder="password"/>
+      <input type="password" class="form-control" id="password" v-model="password"/>
     </div>
     <div class="form-element form-button">
       <button class="btn" @click.prevent="onSubmit">Log in</button>
@@ -19,6 +19,45 @@
     </div>
   </div>
 </template>
+
+<script>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+export default {
+  name: 'Login',
+  setup() {
+    let email = ref('');
+    let password = ref('');
+    let store = useStore();
+    let router = useRouter();
+
+    function onSubmit(){
+      
+      store.dispatch('loginUser', {
+        email: email.value,
+        password: password.value
+      })
+      .then(res => {
+        if(res.err){
+          alert(res.err);
+          return;
+        }
+        if(res.token) router.push('/home');
+
+      })
+
+    }
+
+    return {
+      email,
+      password,
+      onSubmit
+    }
+  }
+}
+</script>
 
 <style scoped>
   .login {

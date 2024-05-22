@@ -1,8 +1,8 @@
 <template>
   <header>
-    <nav class="navbar bg-dark">
+    <nav class="navbar">
       <div class="container">
-        <a class="navbar-brand">nos-budget-app</a>
+        <router-link class="navbar-brand" to="/">nos-budget-app</router-link>
         <div class="nav">
           <router-link to="/">Home</router-link>
           <router-link to="/about">About</router-link>
@@ -10,6 +10,7 @@
         <div class="user"
           v-if="!$store.getters.isAuthenticated">
           <router-link to="/login">Login</router-link>
+          <router-link to="/register">Register</router-link>
         </div>
         <div class="user"
           v-if="$store.getters.isAuthenticated">
@@ -25,6 +26,17 @@
     <router-view/>
   </main>
 </template>
+
+<script>
+import Menu from '@/components/Menu.vue'
+
+export default {
+  name: 'App',
+  components: {
+    Menu
+  }
+}
+</script>
 
 <style scoped>
 
