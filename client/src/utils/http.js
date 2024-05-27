@@ -9,14 +9,6 @@ const postJson = function(options){
         method: 'post',
         headers,
         body: JSON.stringify(options.data)
-    })
-    .then(res => res.json()).then((obj) => {
-        
-        if(obj.token){
-            localStorage.setItem('auth-token', obj.token);
-        }
-
-        return obj;
     });
 }
 

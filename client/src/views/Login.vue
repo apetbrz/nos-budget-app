@@ -45,8 +45,7 @@ export default {
           return;
         }
         if(res.token) router.push('/home');
-
-      })
+      });
 
     }
 
@@ -98,7 +97,8 @@ export default {
     align-items: center;
   }
 
-  ::placeholder {
+  .form-control::placeholder {
     color: var(--color-text);
+    opacity: 0.25;
   }
 </style>

@@ -4,17 +4,17 @@
       <div class="container">
         <router-link class="navbar-brand" to="/">nos-budget-app</router-link>
         <div class="nav">
-          <router-link to="/">Home</router-link>
+          <router-link to="/home">Home</router-link>
           <router-link to="/about">About</router-link>
         </div>
         <div class="user"
-          v-if="!$store.getters.isAuthenticated">
+          v-if="!$store.getters.token">
           <router-link to="/login">Login</router-link>
           <router-link to="/register">Register</router-link>
         </div>
         <div class="user"
-          v-if="$store.getters.isAuthenticated">
-          <a>TODO:STATE-USERNAME</a>
+          v-if="$store.getters.token">
+          <a>{{$store.getters.username}}</a>
         </div>
       </div>
     </nav>
@@ -29,6 +29,11 @@
 
 <script>
 import Menu from '@/components/Menu.vue'
+import store from './store'
+
+if(store.getters.token && !store.getters.username){
+  store.commit('setUserFromToken', store.getters.token);
+}
 
 export default {
   name: 'App',
