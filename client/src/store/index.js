@@ -12,6 +12,9 @@ export default createStore({
     },
     username(state) {
       return state.user === null ? null : JSON.parse(state.user).username;
+    },
+    user(state) {
+      return state.user === null ? null : JSON.parse(state.user); 
     }
   },
   mutations: {

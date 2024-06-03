@@ -15,6 +15,12 @@ a,
   padding: 3px;
 }
 
+.main-element {
+  background-color: var(--color-background-mute);
+  border-radius: var(--corner-radius);
+  padding: 2rem;
+}
+
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
@@ -70,6 +76,45 @@ a,
   footer {
     grid-area: footer;
     padding: 2rem 2rem;
+  }
+
+  input {
+    display: block;
+    background-color: var(--color-background-soft);
+    color: var(--color-text);
+    outline: none;
+    border: 2px solid var(--color-border);
+
+    display:block;
+    width:100%;
+    padding:.375rem .75rem;
+    font-size:1rem;
+    line-height:1.5;
+    background-clip:padding-box;
+    border-radius: var(--corner-radius);
+  }
+  input:focus {
+    border-color: var(--color-border-hover);
+    border-width: 2px;
+  }
+  input:hover {
+    border-color: var(--color-border-hover);
+  }
+
+  input::placeholder {
+    color: var(--color-text);
+    opacity: 0.25;
+  }
+
+  button {
+    background-color: var(--color-background-mute);
+    border-radius: var(--corner-radius);
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+  }
+
+  button:hover {
+    border-color: var(--color-border-hover);
   }
 }
 @media (max-width: 1023px) {

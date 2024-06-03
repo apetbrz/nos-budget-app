@@ -1,19 +1,19 @@
 <template>
-  <div class="register">
+  <div class="register main-element">
     <div class="form-element">
       <h1>New Account</h1>
     </div>
     <div class="form-element">
       <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" id="username" v-model="username" placeholder="newuser" required/>
+      <input type="text" class="text-bar" id="username" v-model="username" placeholder="newuser" required/>
     </div>
     <div class="form-element">
       <label for="email" class="form-label">Email Address</label>
-      <input type="email" class="form-control" id="email" v-model="email" placeholder="name@example.com" required/>
+      <input type="email" class="text-bar" id="email" v-model="email" placeholder="name@example.com" required/>
     </div>
     <div class="form-element">
       <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" v-model="password" required/>
+      <input type="password" class="text-bar" id="password" v-model="password" required/>
     </div>
     <div class="form-element form-button">
       <button class="btn" @click.prevent="onSubmit">Register</button>
@@ -71,20 +71,6 @@ export default {
     width: 100%;
   }
 
-  input {
-    background-color: var(--color-background-soft);
-    color: var(--color-text);
-    outline: none;
-    border: none;
-  }
-  input:focus {
-    background-color: var(--color-background-mute);
-    color: var(--color-text);
-    outline: none;
-    border: none;
-    cursor: pointer;
-  }
-
   button {
     background-color: var(--color-background-soft);
     color: var(--color-text);
@@ -101,10 +87,5 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  .form-control::placeholder {
-    color: var(--color-text);
-    opacity: 0.25;
   }
 </style>
