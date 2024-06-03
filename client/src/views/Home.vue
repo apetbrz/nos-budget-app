@@ -1,20 +1,27 @@
 <template>
-  <main>
+  <div class="view">
     <div class="home" style="text-align:center">
       <img alt="Vue logo" src="../assets/logo.png">
-      <HelloWorld msg="HOMEPAGE!"/>
+      <div></div>
     </div>
-  </main>
+  </div>
 </template>
+
+<style scoped>
+.view {
+  display: grid;
+
+  background-color: var(--color-background-mute);
+  border-radius: var(--corner-radius);
+  padding: 2rem;
+}
+</style>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'Home',
   components: {
-    HelloWorld
   }
 }
 </script>

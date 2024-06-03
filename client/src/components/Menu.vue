@@ -12,5 +12,9 @@
 </template>
 
 <style scoped>
-    
+.menu {
+  background-color: var(--color-background-mute);
+  border-radius: var(--corner-radius);
+  padding: 2rem;
+}
 </style>

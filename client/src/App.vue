@@ -19,17 +19,15 @@
       </div>
     </nav>
   </header>
-  <menu>
-    <Menu />
-  </menu>
   <main>
+    <Menu />
     <router-view/>
   </main>
 </template>
 
 <script>
-import Menu from '@/components/Menu.vue'
 import store from './store'
+import Menu from '@/components/Menu.vue'
 
 if(store.getters.token && !store.getters.username){
   store.commit('setUserFromToken', store.getters.token);

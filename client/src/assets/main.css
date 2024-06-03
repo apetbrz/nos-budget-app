@@ -34,11 +34,10 @@ a,
   #app {
     display: grid;
     grid-template-areas: 
-      'header header'
-      'menu main'
-      'menu main'
-      'footer footer';
-    grid-template-columns: 25% 75%;
+      'header'
+      'main'
+      'footer';
+    grid-template-columns: 100%;
     justify-items: stretch;
     gap: 1rem;
     padding: 2rem 2rem 1rem 2rem;
@@ -51,9 +50,18 @@ a,
 
   main {
     grid-area: main;
-    padding: 2rem 2rem;
+    display: grid;
+    grid-template-areas:
+      'menu view';
+    grid-template-rows: 100%;
+    grid-template-columns: 1fr 3fr;
+    gap: 1rem;
   }
 
+  router-view {
+    grid-area: view;
+    padding: 2rem 2rem;
+  }
   menu {
     grid-area: menu;
     padding: 2rem 2rem;
