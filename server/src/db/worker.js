@@ -7,16 +7,16 @@ const dataTableName = "data";
 //initialize the database:
 db.serialize(() => {
     console.log("creating db table");
-    db.run(`CREATE TABLE IF NOT EXISTS ${authTableName} (email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, username TEXT NOT NULL, PRIMARY KEY (email))`);
-    db.run(`CREATE TABLE IF NOT EXISTS ${dataTableName} (email TEXT UNIQUE NOT NULL, username TEXT NOT NULL, jsondata TEXT NOT NULL, PRIMARY KEY (email))`);
+    db.run(`CREATE TABLE IF NOT EXISTS ? (email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, username TEXT NOT NULL, PRIMARY KEY (email))`, authTableName);
+    db.run(`CREATE TABLE IF NOT EXISTS ? (email TEXT UNIQUE NOT NULL, username TEXT NOT NULL, jsondata TEXT NOT NULL, PRIMARY KEY (email))`, dataTableName);
 });
 
 /**
  * addUser(): adds a user to the database
  *
  * @param { {username: string, email: string, password: string} } data user data
- * @param { (success: boolean, err: string) } callback runs after user insert
- * @returns { success: boolean } true if user inserted successfully, false if failed to insert user
+ * @param { (success: boolean, err: string | null) } callback runs after user insert
+ * @returns { boolean } true if user inserted successfully, false if failed to insert user
  */
 const addUser = function(data, callback){
     //if username/email/password dont exist, data is invalid
@@ -37,13 +37,13 @@ const addUser = function(data, callback){
     else {
         let success = false;
         //begin an sql transaction,
-        db.exec("BEGIN TRANSACTION");
+        db.run("BEGIN TRANSACTION");
         //where we add the user to the auth table
-        db.exec(`INSERT INTO ${authTableName} (email, password, username) VALUES ('${data.email}', '${data.password}', '${data.username}')`);
+        db.run(`INSERT INTO ? (email, password, username) VALUES ('?', '?', '?')`, authTableName, data.email, data.password, data.username);
         //and the data table
-        db.exec(`INSERT INTO ${dataTableName} (email, username, jsondata) VALUES ('${data.email}', '${data.username}', '${JSON.stringify({})}')`);
+        db.run(`INSERT INTO ? (email, username, jsondata) VALUES ('?', '?', '?')`, dataTableName, data.email, data.username, JSON.stringify({}));
         //commit the transaction
-        db.exec("COMMIT TRANSACTION", (err) => {
+        db.run("COMMIT TRANSACTION", (err) => {
             //if there is an error,
             if(err){
                 //print it out
@@ -78,9 +78,9 @@ const addUser = function(data, callback){
  * @returns { boolean } true if user found, false if not
  */
 const findUserByEmailForVerification = function(query, callback){
-    let sql = `SELECT * FROM ${authTableName} WHERE email='${query}'`;
+    let sql = `SELECT * FROM ${authTableName} WHERE email='?'`;
     let exists = false;
-    db.get(sql, (err, row) => {
+    db.get(sql, query, (err, row) => {
         //if row === undefined, user does not exist
         exists = row !== undefined;
         //TODO: SQLITE3 ERROR HANDLING
@@ -102,9 +102,9 @@ const findUserByEmailForVerification = function(query, callback){
  * @returns { boolean } true if user found, false if not
  */
 const findUserByEmailForClient = function(query, callback){
-    let sql = `SELECT * FROM ${dataTableName} WHERE email='${query}'`;
+    let sql = `SELECT * FROM ${dataTableName} WHERE email='?'`;
     let exists = false;
-    db.get(sql, (err, row) => {
+    db.get(sql, query, (err, row) => {
         //if row === undefined, user does not exist
         exists = row !== undefined;
         //TODO: SQLITE3 ERROR HANDLING
