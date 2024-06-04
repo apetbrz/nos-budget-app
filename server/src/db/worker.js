@@ -7,8 +7,8 @@ const dataTableName = "data";
 //initialize the database:
 db.serialize(() => {
     console.log("creating db table");
-    db.run(`CREATE TABLE IF NOT EXISTS ? (email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, username TEXT NOT NULL, PRIMARY KEY (email))`, authTableName);
-    db.run(`CREATE TABLE IF NOT EXISTS ? (email TEXT UNIQUE NOT NULL, username TEXT NOT NULL, jsondata TEXT NOT NULL, PRIMARY KEY (email))`, dataTableName);
+    db.run(`CREATE TABLE IF NOT EXISTS ${authTableName} (email TEXT UNIQUE NOT NULL, password TEXT NOT NULL, username TEXT NOT NULL, PRIMARY KEY (email))`);
+    db.run(`CREATE TABLE IF NOT EXISTS ${dataTableName} (email TEXT UNIQUE NOT NULL, username TEXT NOT NULL, jsondata TEXT NOT NULL, PRIMARY KEY (email))`);
 });
 
 /**
