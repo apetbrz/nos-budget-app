@@ -11,22 +11,31 @@ db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS ${dataTableName} (email TEXT UNIQUE NOT NULL, username TEXT NOT NULL, jsondata TEXT NOT NULL, PRIMARY KEY (email))`);
 });
 
-//addUser: takes json data of user to add and adds it to the database
+/**
+ * addUser(): adds a user to the database
+ *
+ * @param { {username: string, email: string, password: string} } data user data
+ * @param { (success: boolean, err: string) } callback runs after user insert
+ * @returns { success: boolean } true if user inserted successfully, false if failed to insert user
+ */
 const addUser = function(data, callback){
     //if username/email/password dont exist, data is invalid
     if(!data.username || !data.email || !data.password){
         //if so, throw an error
         console.log('invalid user data');
         if(callback) callback(false, "invalid-user-data");
+        return false;
     }
     //check if user exists
     else if(findUserByEmailForVerification(data.email)){
         //if so, throw an error
         console.log('user already found');
         if(callback) callback(false, "user-already-exists");
+        return false;
     }
     //otherwise, insert the user into database
     else {
+        let success = false;
         //begin an sql transaction,
         db.exec("BEGIN TRANSACTION");
         //where we add the user to the auth table
@@ -54,19 +63,27 @@ const addUser = function(data, callback){
             else{
                 console.log(`user added: ${data.email}`);
                 if(callback) callback(true, null);
+                success = true;
             }
         });
+        return success;
     }
 }
 
-//findUserByEmailForVerification: seaches auth table in database for user, runs the callback function on the row and returns true/false for if found or not
-//contains password
-//does not contain json data
+/**
+ * findUserByEmailForVerification(): searches auth table for user
+ *
+ * @param { string } query the email to search for
+ * @param {(err: Error | null, row: Object | null)} callback if row found, err = null and row = row object, or if not found, err = error and row = null
+ * @returns { boolean } true if user found, false if not
+ */
 const findUserByEmailForVerification = function(query, callback){
     let sql = `SELECT * FROM ${authTableName} WHERE email='${query}'`;
     let exists = false;
     db.get(sql, (err, row) => {
+        //if row === undefined, user does not exist
         exists = row !== undefined;
+        //TODO: SQLITE3 ERROR HANDLING
         if(err){
             console.log(err);
             if(callback) callback(err, null);
@@ -76,15 +93,21 @@ const findUserByEmailForVerification = function(query, callback){
     return exists;
 }
 
-//findUserByEamilForClient: searches data table in database for user, runs the callback function on the row and returns true/false for if found or not
-//does not contain password
-//contains json data
+
+/**
+ * findUserByEmailForClient
+ *
+ * @param { string } query the email to serach for
+ * @param {(err: Error | null, row: Object | null)} callback if row found, err = null and row = row object, or if not found, err = error and row = null
+ * @returns { boolean } true if user found, false if not
+ */
 const findUserByEmailForClient = function(query, callback){
-    console.log("user search (client) - query=" + query);
-    sql = `SELECT * FROM ${dataTableName} WHERE email='${query}'`;
+    let sql = `SELECT * FROM ${dataTableName} WHERE email='${query}'`;
     let exists = false;
     db.get(sql, (err, row) => {
+        //if row === undefined, user does not exist
         exists = row !== undefined;
+        //TODO: SQLITE3 ERROR HANDLING
         if(err){
             console.log(err);
             if(callback) callback(err, null);
