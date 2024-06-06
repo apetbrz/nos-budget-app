@@ -38,8 +38,6 @@ const addUser = function(data){
         //check if user exists
         findUserByEmailForVerification(data.email)
         .then((row) => {
-            console.log("addUser findUser row: ");
-            console.log(row);
             //if row !== undefined, the user exists already
             if (row !== undefined){
                 //if so, throw an error

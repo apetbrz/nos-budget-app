@@ -80,8 +80,6 @@ router.post('/login', (req, res) => {
 
 //user-query: grab data about the user, from token
 router.post('/user-query', (req, res) => {
-    console.log("user-query called on server");
-
     //get the token
     let token = req.body.token;
 
