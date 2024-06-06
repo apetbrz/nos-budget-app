@@ -18,3 +18,9 @@
   padding: 2rem;
 }
 </style>
+
+<script>
+export default {
+    name: "Menu"
+}
+</script>

@@ -39,12 +39,16 @@ export default {
         email: email.value,
         password: password.value
       })
-      .then(res => {
+      .then((res) => {
         if(res.err){
           alert(res.err);
-          return;
         }
-        if(res.token) router.push('/home');
+        else if(res.token){
+          store.dispatch('updateUserDataFromToken', {token: res.token})
+          .then((res) => {
+            router.push('/home')
+          });
+        }
       });
 
     }
@@ -64,10 +68,11 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+    padding: 2rem;
   }
 
   .form-element {
-    margin: 1rem 1rem 0rem 1rem;
+    margin: 1rem;
     width: 32rem;
     align-self: center;
   }

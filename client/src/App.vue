@@ -14,29 +14,32 @@
         </div>
         <div class="user"
           v-if="$store.getters.token">
-          <a>{{$store.getters.username}}</a>
+          <router-link to="/user">{{$store.getters.username}}</router-link>
         </div>
       </div>
     </nav>
   </header>
   <main>
-    <Menu />
     <router-view/>
   </main>
 </template>
 
 <script>
-import store from './store'
-import Menu from '@/components/Menu.vue'
-
-if(store.getters.token && !store.getters.username){
-  store.commit('setUserFromToken', store.getters.token);
-}
+import store from './store';
+import Menu from '@/components/Menu.vue';
+import { onMounted } from 'vue';
 
 export default {
   name: 'App',
   components: {
     Menu
+  },
+  setup(){
+    onMounted(() => {
+      if(store.getters.token && !store.getters.username){
+        store.dispatch('updateUserDataFromToken', {token: store.getters.token});
+      }
+    })
   }
 }
 </script>

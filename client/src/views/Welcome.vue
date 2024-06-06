@@ -1,7 +1,10 @@
 <template>
   <div class="home" style="text-align:center">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Logo" src="../assets/logo.png">
+    <h1>The Simple, Command-Based Budgeting Solution</h1>
+    <div>
+      <h3>Created by Arthur Petroff</h3>
+    </div>
   </div>
 </template>
 
@@ -9,18 +12,23 @@
 .home {
   background-color: var(--color-background-mute);
   border-radius: var(--corner-radius);
-  padding: 2rem;
+  padding: 3rem;
+}
+
+h1 {
+  margin: 2rem;
+}
+
+h3 {
+  margin: 2rem;
 }
 </style>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'Welcome',
   components: {
-    HelloWorld
   }
 }
 </script>

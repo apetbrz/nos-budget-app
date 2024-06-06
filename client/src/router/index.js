@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
+import User from '../views/User.vue'
 import store from '../store/index'
 
 const routes = [
@@ -41,6 +42,18 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: User,
+    beforeEnter(to, from, next) {
+      if(!store.getters.token) {
+        next({name: 'login'});
+      } else {
+        next();
+      }
+    }
   }
 ]
 
