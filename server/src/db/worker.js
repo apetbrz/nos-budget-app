@@ -37,13 +37,19 @@ const addUser = function(data){
         }
         //check if user exists
         findUserByEmailForVerification(data.email)
-        .then(() => {
-            //if so, throw an error
-            console.log('user already found');
-            reject("user-already-exists");
-        })
-        .catch(() => {
-            let success = false;
+        .then((row) => {
+            console.log("addUser findUser row: ");
+            console.log(row);
+            //if row !== undefined, the user exists already
+            if (row !== undefined){
+                //if so, throw an error
+                console.log('user already found');
+                reject("user-already-exists");
+                return;
+            }
+            //otherwise, add the user:
+
+            //create a new uuid
             let uuid = uuidCreate();
             //begin an sql transaction,
             db.exec("BEGIN TRANSACTION");
@@ -53,26 +59,32 @@ const addUser = function(data){
             db.run(`INSERT INTO ${dataTableName} (uuid, username, jsondata) VALUES (?, ?, '')`, uuid, data.username); //jsondata value intentionally left empty, filled by client
             //commit the transaction
             db.exec("COMMIT TRANSACTION", (err) => {
-                //if there is an error,
+                //if there is an error, print it out and cancel
                 if(err){
-                    //print it out
                     console.log("addUser SQL transaction error:");
                     console.table(err);
                     reject(dev ? err : "database-error");
+                    return;
                 }
-                else{
-                    console.log(`user added: ${data.email}`);
-                    //and create a new table for the user's transaction history
-                    db.run(`CREATE TABLE IF NOT EXISTS trnx_hist_${uuid} ${userTransactionHistoryTableCols}`, (err) => {
-                        if(err){
-                            console.log("error in creating user transaction table: " + err);
-                            console.table(err);
-                            reject(dev ? err : "database-error");
-                        }
-                    });
-                    resolve();
-                }
+                //otherwise, log success
+                console.log(`user added: ${data.email}`);
+                //and create a new table for the user's transaction history
+                db.run(`CREATE TABLE IF NOT EXISTS trnx_hist_${uuid} ${userTransactionHistoryTableCols}`, (err) => {
+                    if(err){
+                        console.log("error in creating user transaction table: " + err);
+                        console.table(err);
+                        reject(dev ? err : "database-error");
+                    }
+                    
+                    //TODO: CLEAR ROWS IN AUTH AND DATA TABLES IF NEW TABLE CREATION FAILED, JUST IN CASE
+
+                });
+                resolve();
             });
+        })
+        .catch((err) => {
+            console.log(err);
+            reject(dev ? err : "database-error");
         })
     });
 }
