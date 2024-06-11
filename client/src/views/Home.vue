@@ -42,7 +42,6 @@ import Menu from '@/components/Menu.vue'
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { useStore } from 'vuex';
-import budget from '../utils/budget';
 
 export default {
   name: 'Home',

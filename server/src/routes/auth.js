@@ -2,15 +2,15 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../db/worker');
-const validator = require('validator')
+const db = require('../db/dbworker');
+const validator = require('validator');
 
 require('dotenv').config("../../");
 
 //auth.js: handles authenticating users
 
 //register: register a user 
-router.post('/register', async (req, res) => {
+router.post('/register', (req, res) => {
     //grab username, email, password
     let username = req.body.username;
     let email = req.body.email;
@@ -48,7 +48,7 @@ router.post('/login', (req, res) => {
     let password = req.body.password;
 
     if(!email || !password || !validator.isEmail(email)){
-        return res.status(400).send({err: 'invalid-username-email-password'});
+        return res.status(400).send({err: 'invalid-email-password'});
     }
 
     //check database for user
@@ -104,5 +104,14 @@ router.post('/user-query', (req, res) => {
         });
     });
 });
+
+router.post('/validate', (req, res) => {
+    let token = req.body.token;
+
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        if(err) return res.status(401).send({err: "invalid token"});
+        else return res.send({});
+    })
+})
 
 module.exports = router;

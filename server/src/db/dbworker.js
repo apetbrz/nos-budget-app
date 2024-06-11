@@ -1,6 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
 const sqlstring = require("sqlstring");
 const { v4: uuidv4 } = require("uuid");
+const { Budget } = require('../utils/budget'); 
 require('dotenv').config("../../");
 
 const dev = process.env.DEVELOPER === "true";
@@ -54,7 +55,7 @@ const addUser = function(data){
             //where we add the user to the auth table
             db.run(`INSERT INTO ${authTableName} (uuid, email, password) VALUES (?, ?, ?)`, uuid, data.email, data.password);
             //and the data table
-            db.run(`INSERT INTO ${dataTableName} (uuid, username, jsondata) VALUES (?, ?, '')`, uuid, data.username); //jsondata value intentionally left empty, filled by client
+            db.run(`INSERT INTO ${dataTableName} (uuid, username, jsondata) VALUES (?, ?, ?)`, uuid, data.username, JSON.stringify(new Budget)); //jsondata value intentionally left empty, filled by client
             //commit the transaction
             db.exec("COMMIT TRANSACTION", (err) => {
                 //if there is an error, print it out and cancel
@@ -116,13 +117,11 @@ const findUserByEmailForClient = function(query){
 
     //search auth table for uuid
     let sql = `SELECT * FROM ${dataTableName} WHERE uuid=?`;
-    let uuid;
 
     return new Promise((resolve, reject) => {
         findUserByEmailForVerification(query)
         .then((authRow) => {
-            uuid = authRow.uuid;
-            db.get(sql, uuid, (err, dataRow) => {
+            db.get(sql, authRow.uuid, (err, dataRow) => {
                 if(err) reject(err);
                 else resolve(dataRow);
             });
@@ -160,7 +159,6 @@ const uuidExists = function(uuid){
 }
 
 module.exports = {
-    db,
     addUser,
     findUserByEmailForVerification,
     findUserByEmailForClient

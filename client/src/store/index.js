@@ -1,6 +1,5 @@
 import { Store, createStore } from 'vuex'
 import { postJson } from '../utils/http';
-import { Budget } from '../utils/budget'; 
 
 export default createStore({
   /**
@@ -43,7 +42,6 @@ export default createStore({
      * @param { any } data json data
      */
     setUserFromServerJsonData(state, data){
-      if(data.jsondata === '') data.jsondata = new Budget;
       let userString = JSON.stringify(data);
       localStorage.setItem('user-info', userString);
       state.user = userString;
@@ -51,6 +49,7 @@ export default createStore({
 
     /**
      * updateUserJsonData(): replaces user jsondata in local storage
+     * TODO: REMOVE
      * @param { Store } state 
      * @param { any } data new json data
      */
@@ -68,6 +67,7 @@ export default createStore({
      * @param { any } value new value for target key
      */
     updateUserJsonDataValue(state, key, value){
+      //TODO: SEND KEY/VALUE TO SERVER, HANDLE SERVERSIDE
       let userData = state.getters.user;
       userData.jsondata[`${key}`] = value;
       state.user = JSON.stringify(userData);
@@ -121,6 +121,38 @@ export default createStore({
     },
 
     /**
+     * logOutUser(): clears local storage and sets user state data to null
+     * @param { Store } context 
+     * @returns 
+     */
+    logOutUser(context) {
+      return new Promise((resolve, reject) => {
+        localStorage.removeItem("auth-token");
+        localStorage.removeItem("user-info");
+        context.commit('logOut');
+        resolve();
+      });
+    },
+
+    /**
+     * validateUser(): verifies that user token is valid, logs out if not
+     * @param { Store } context 
+     */
+    validateUser(context) {
+
+      let data = { token: context.getters.token };
+      return postJson({
+        url: '/validate',
+        data
+      }).then(res => res.json()).then((obj) => {
+        if(obj.err){
+          console.log(obj.err);
+          context.dispatch(logOutUser);
+        }
+      })
+    },
+
+    /**
      * updateUserDataFromToken(): grabs user from database on server and stores it locally
      * @param { Store } context 
      * @param { {token: string} } token auth token
@@ -133,22 +165,10 @@ export default createStore({
       }).then(res => res.json()).then((obj) => {
         if(obj.err){
           console.log(obj.err);
+          reject();
           return;
         }
         context.commit('setUserFromServerJsonData', obj);
-      });
-    },
-
-    /**
-     * logOut(): clears local storage and sets user state data to null
-     * @param { Store } context 
-     * @returns 
-     */
-    logOut(context) {
-      return new Promise((resolve, reject) => {
-        localStorage.removeItem("auth-token");
-        localStorage.removeItem("user-info");
-        context.commit('logOut');
         resolve();
       });
     },

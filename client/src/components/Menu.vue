@@ -1,5 +1,5 @@
 <template>
-    <div class="menu">
+    <div class="menu main-element">
         <h2>MENU</h2>
         <ul>
             <li>TEST</li>
@@ -12,11 +12,7 @@
 </template>
 
 <style scoped>
-.menu {
-  background-color: var(--color-background-mute);
-  border-radius: var(--corner-radius);
-  padding: 2rem;
-}
+
 </style>
 
 <script>

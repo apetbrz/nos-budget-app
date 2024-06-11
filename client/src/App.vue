@@ -28,6 +28,7 @@
 import store from './store';
 import Menu from '@/components/Menu.vue';
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'App',
@@ -35,7 +36,13 @@ export default {
     Menu
   },
   setup(){
+    let router = useRouter();
+
     onMounted(() => {
+
+      //TODO: VALIDATE TOKEN
+      store.dispatch('validateUser');
+
       if(store.getters.token && !store.getters.username){
         store.dispatch('updateUserDataFromToken', {token: store.getters.token});
       }
