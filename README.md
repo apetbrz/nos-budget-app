@@ -1,6 +1,6 @@
 # nos-budget-app
 
-The beginnings of a budgetting webservice I am writing, using Vue/Vuex and Express.js.
+The beginnings of a budgeting webservice I am writing, using Vue/Vuex and Express.js.
 
 to start dev environment, run this in bash:
 
